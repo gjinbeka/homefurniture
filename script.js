@@ -15,44 +15,28 @@ const products = [
 
 let cart = [];
 
-
 // SHOW PRODUCTS
 function displayProducts(list = products) {
     const box = document.getElementById("products-container");
+    if (!box) return;
 
     box.innerHTML = list.length ? list.map(p => `
         <div class="product-card">
-
             <div class="product-image">${p.icon}</div>
-
             <div class="product-info">
-
                 <span class="product-category">${p.category}</span>
-
                 <h3>${p.name}</h3>
-
-                <p class="product-description">
-                    ${p.description}
-                </p>
-
+                <p class="product-description">${p.description}</p>
                 <div class="product-bottom">
-
-                    <span class="price">
-                        $${p.price.toFixed(2)}
-                    </span>
-
-                    <button class="add-button"
-                        onclick="addToCart(${p.id})">
+                    <span class="price">$${p.price.toFixed(2)}</span>
+                    <button class="add-button" onclick="addToCart(${p.id})">
                         Add to Cart
                     </button>
-
                 </div>
-
             </div>
         </div>
     `).join("") : "<p>No products found.</p>";
 }
-
 
 // FILTER
 function filterProducts(category) {
@@ -63,10 +47,12 @@ function filterProducts(category) {
     );
 }
 
-
 // SEARCH
 function searchProducts() {
-    const text = document.getElementById("search").value.toLowerCase();
+    const searchInput = document.getElementById("search");
+    if (!searchInput) return;
+
+    const text = searchInput.value.toLowerCase();
 
     displayProducts(
         products.filter(p =>
@@ -75,7 +61,6 @@ function searchProducts() {
         )
     );
 }
-
 
 // ADD TO CART
 function addToCart(id) {
@@ -92,62 +77,55 @@ function addToCart(id) {
     alert(product.name + " added to cart!");
 }
 
-
 // UPDATE CART
 function updateCart() {
-    document.getElementById("cart-count").textContent =
-        cart.reduce((total, p) => total + p.quantity, 0);
+    const cartCount = document.getElementById("cart-count");
+    if (cartCount) {
+        cartCount.textContent = cart.reduce((total, p) => total + p.quantity, 0);
+    }
 
     displayCart();
 }
 
-
 // DISPLAY CART
 function displayCart() {
     const box = document.getElementById("cart-items");
+    const totalElement = document.getElementById("cart-total");
+
+    if (!box) return;
 
     if (!cart.length) {
         box.innerHTML = `<p class="empty-cart">Your cart is empty.</p>`;
-        document.getElementById("cart-total").textContent = "$0.00";
+        if (totalElement) totalElement.textContent = "$0.00";
         return;
     }
 
     box.innerHTML = cart.map(p => `
         <div class="cart-item">
-
             <div class="cart-item-image">${p.icon}</div>
-
             <div>
                 <h4>${p.name}</h4>
-
                 <p>$${p.price.toFixed(2)} × ${p.quantity}</p>
-
                 <button onclick="changeQuantity(${p.id}, -1)">−</button>
                 ${p.quantity}
                 <button onclick="changeQuantity(${p.id}, 1)">+</button>
             </div>
-
-            <button class="remove-button"
-                onclick="removeFromCart(${p.id})">
+            <button class="remove-button" onclick="removeFromCart(${p.id})">
                 ✕
             </button>
-
         </div>
     `).join("");
 
-    const total = cart.reduce(
-        (sum, p) => sum + p.price * p.quantity, 0
-    );
+    const total = cart.reduce((sum, p) => sum + p.price * p.quantity, 0);
 
-    document.getElementById("cart-total").textContent =
-        "$" + total.toFixed(2);
+    if (totalElement) {
+        totalElement.textContent = "$" + total.toFixed(2);
+    }
 }
-
 
 // CHANGE QUANTITY
 function changeQuantity(id, amount) {
     const item = cart.find(p => p.id === id);
-
     if (!item) return;
 
     item.quantity += amount;
@@ -159,27 +137,31 @@ function changeQuantity(id, amount) {
     }
 }
 
-
-// REMOVE
+// REMOVE FROM CART
 function removeFromCart(id) {
     cart = cart.filter(p => p.id !== id);
     updateCart();
 }
 
-
 // OPEN CART
 function openCart() {
-    document.getElementById("cart").classList.add("active");
-    document.getElementById("cart-overlay").classList.add("active");
+    const cartEl = document.getElementById("cart");
+    const overlay = document.getElementById("cart-overlay");
+    if (cartEl && overlay) {
+        cartEl.classList.add("active");
+        overlay.classList.add("active");
+    }
 }
-
 
 // CLOSE CART
 function closeCart() {
-    document.getElementById("cart").classList.remove("active");
-    document.getElementById("cart-overlay").classList.remove("active");
+    const cartEl = document.getElementById("cart");
+    const overlay = document.getElementById("cart-overlay");
+    if (cartEl && overlay) {
+        cartEl.classList.remove("active");
+        overlay.classList.remove("active");
+    }
 }
-
 
 // CHECKOUT
 function checkout() {
@@ -187,9 +169,11 @@ function checkout() {
         alert("Your cart is empty!");
     } else {
         alert("Thank you for shopping with HomeStyle!");
+        cart = [];
+        updateCart();
+        closeCart();
     }
 }
-
 
 // CONTACT FORM
 function sendMessage(event) {
@@ -198,7 +182,9 @@ function sendMessage(event) {
     event.target.reset();
 }
 
-
-// START
-displayProducts();
-updateCart();
+// INIT - SIGUROHEM QË HTML ËSHTË NGARKUAR PLOTËSISHT PARA EXECUTION
+document.addEventListener("DOMContentLoaded", () => {
+    displayProducts();
+    updateCart();
+});
+   
