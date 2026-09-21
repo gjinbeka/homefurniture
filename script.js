@@ -90,7 +90,9 @@ let cart = [];
 // SHOW PRODUCTS
 function displayProducts(list = products) {
     const box = document.getElementById("products-container");
+    if (!box) return;
 
+<<<<<<< HEAD
     box.innerHTML = list.length
         ? list.map(p => `
             <div class="product-card">
@@ -105,6 +107,18 @@ function displayProducts(list = products) {
 
                     <button class="add-button"
                             onclick="addToCart(${p.id})">
+=======
+    box.innerHTML = list.length ? list.map(p => `
+        <div class="product-card">
+            <div class="product-image">${p.icon}</div>
+            <div class="product-info">
+                <span class="product-category">${p.category}</span>
+                <h3>${p.name}</h3>
+                <p class="product-description">${p.description}</p>
+                <div class="product-bottom">
+                    <span class="price">$${p.price.toFixed(2)}</span>
+                    <button class="add-button" onclick="addToCart(${p.id})">
+>>>>>>> 546fd9e9bf64aa2231cfd9617cdfd053b06adbd6
                         Add to Cart
                     </button>
                 </div>
@@ -113,7 +127,11 @@ function displayProducts(list = products) {
         : "<p>No products found.</p>";
 }
 
+<<<<<<< HEAD
 // FILTER PRODUCTS
+=======
+// FILTER
+>>>>>>> 546fd9e9bf64aa2231cfd9617cdfd053b06adbd6
 function filterProducts(category) {
     displayProducts(
         category === "all"
@@ -122,12 +140,21 @@ function filterProducts(category) {
     );
 }
 
+<<<<<<< HEAD
 // SEARCH PRODUCTS
 function searchProducts() {
     const text = document
         .getElementById("search")
         .value
         .toLowerCase();
+=======
+// SEARCH
+function searchProducts() {
+    const searchInput = document.getElementById("search");
+    if (!searchInput) return;
+
+    const text = searchInput.value.toLowerCase();
+>>>>>>> 546fd9e9bf64aa2231cfd9617cdfd053b06adbd6
 
     displayProducts(
         products.filter(p =>
@@ -157,8 +184,15 @@ function addToCart(id) {
 
 // UPDATE CART
 function updateCart() {
+<<<<<<< HEAD
     document.getElementById("cart-count").textContent =
         cart.reduce((sum, p) => sum + p.quantity, 0);
+=======
+    const cartCount = document.getElementById("cart-count");
+    if (cartCount) {
+        cartCount.textContent = cart.reduce((total, p) => total + p.quantity, 0);
+    }
+>>>>>>> 546fd9e9bf64aa2231cfd9617cdfd053b06adbd6
 
     displayCart();
 }
@@ -166,15 +200,24 @@ function updateCart() {
 // DISPLAY CART
 function displayCart() {
     const box = document.getElementById("cart-items");
+    const totalElement = document.getElementById("cart-total");
+
+    if (!box) return;
 
     if (!cart.length) {
+<<<<<<< HEAD
         box.innerHTML = "<p>Your cart is empty.</p>";
         document.getElementById("cart-total").textContent = "$0.00";
+=======
+        box.innerHTML = `<p class="empty-cart">Your cart is empty.</p>`;
+        if (totalElement) totalElement.textContent = "$0.00";
+>>>>>>> 546fd9e9bf64aa2231cfd9617cdfd053b06adbd6
         return;
     }
 
     box.innerHTML = cart.map(p => `
         <div class="cart-item">
+<<<<<<< HEAD
             <img src="${p.image}"
                  width="60"
                  alt="${p.name}">
@@ -187,6 +230,13 @@ function displayCart() {
                     −
                 </button>
 
+=======
+            <div class="cart-item-image">${p.icon}</div>
+            <div>
+                <h4>${p.name}</h4>
+                <p>$${p.price.toFixed(2)} × ${p.quantity}</p>
+                <button onclick="changeQuantity(${p.id}, -1)">−</button>
+>>>>>>> 546fd9e9bf64aa2231cfd9617cdfd053b06adbd6
                 ${p.quantity}
 
                 <button onclick="changeQuantity(${p.id}, 1)">
@@ -197,6 +247,7 @@ function displayCart() {
                     ✕
                 </button>
             </div>
+<<<<<<< HEAD
         </div>
     `).join("");
 
@@ -204,15 +255,24 @@ function displayCart() {
         (sum, p) => sum + p.price * p.quantity,
         0
     );
+=======
+            <button class="remove-button" onclick="removeFromCart(${p.id})">
+                ✕
+            </button>
+        </div>
+    `).join("");
 
-    document.getElementById("cart-total").textContent =
-        "$" + total.toFixed(2);
+    const total = cart.reduce((sum, p) => sum + p.price * p.quantity, 0);
+>>>>>>> 546fd9e9bf64aa2231cfd9617cdfd053b06adbd6
+
+    if (totalElement) {
+        totalElement.textContent = "$" + total.toFixed(2);
+    }
 }
 
 // CHANGE QUANTITY
 function changeQuantity(id, amount) {
     const item = cart.find(p => p.id === id);
-
     if (!item) return;
 
     item.quantity += amount;
@@ -232,14 +292,22 @@ function removeFromCart(id) {
 
 // OPEN CART
 function openCart() {
-    document.getElementById("cart").classList.add("active");
-    document.getElementById("cart-overlay").classList.add("active");
+    const cartEl = document.getElementById("cart");
+    const overlay = document.getElementById("cart-overlay");
+    if (cartEl && overlay) {
+        cartEl.classList.add("active");
+        overlay.classList.add("active");
+    }
 }
 
 // CLOSE CART
 function closeCart() {
-    document.getElementById("cart").classList.remove("active");
-    document.getElementById("cart-overlay").classList.remove("active");
+    const cartEl = document.getElementById("cart");
+    const overlay = document.getElementById("cart-overlay");
+    if (cartEl && overlay) {
+        cartEl.classList.remove("active");
+        overlay.classList.remove("active");
+    }
 }
 
 // CHECKOUT
@@ -248,6 +316,9 @@ function checkout() {
         alert("Your cart is empty!");
     } else {
         alert("Thank you for shopping with HomeStyle!");
+        cart = [];
+        updateCart();
+        closeCart();
     }
 }
 
@@ -258,6 +329,15 @@ function sendMessage(event) {
     event.target.reset();
 }
 
+<<<<<<< HEAD
 // START
 displayProducts();
 updateCart();
+=======
+// INIT - SIGUROHEM QË HTML ËSHTË NGARKUAR PLOTËSISHT PARA EXECUTION
+document.addEventListener("DOMContentLoaded", () => {
+    displayProducts();
+    updateCart();
+});
+   
+>>>>>>> 546fd9e9bf64aa2231cfd9617cdfd053b06adbd6
