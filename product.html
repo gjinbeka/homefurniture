@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Product | HomeStyle</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+<header>
+
+    <div class="logo">
+        Home<span>Style</span>
+    </div>
+
+
+    <nav>
+
+        <a href="index.html#home">
+            Home
+        </a>
+
+        <a href="index.html#products">
+            Products
+        </a>
+
+        <a href="index.html#about">
+            About
+        </a>
+
+        <a href="index.html#contact">
+            Contact
+        </a>
+
+    </nav>
+
+
+    <button onclick="goToCart()">
+        🛒 <span id="count">0</span>
+    </button>
+
+</header>
+
+
+
+<main class="product-page">
+
+    <a
+        href="index.html#products"
+        class="back-button"
+    >
+        ← Back to Products
+    </a>
+
+
+    <div
+        id="productDetails"
+        class="product-details"
+    ></div>
+
+</main>
+
+
+
+<footer>
+
+    <div class="logo">
+        Home<span>Style</span>
+    </div>
+
+    <p>
+        Modern products for modern homes.
+    </p>
+
+    <small>
+        © 2026 HomeStyle
+    </small>
+
+</footer>
+
+
+
+<script src="main.js"></script>
+
+
+<script>
+
+/* =========================
+   GET PRODUCT ID
+========================= */
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const productId =
+    Number(params.get("id"));
+
+
+/* =========================
+   FIND PRODUCT
+========================= */
+
+const product =
+    products.find(
+        p => p.id === productId
+    );
+
+
+/* =========================
+   SHOW PRODUCT
+========================= */
+
+const details =
+    document.getElementById(
+        "productDetails"
+    );
+
+
+if (product) {
+
+    document.title =
+        product.name + " | HomeStyle";
+
+
+    details.innerHTML = `
+
+        <div class="product-image">
+
+            <img
+                src="${product.image}"
+                alt="${product.name}"
+            >
+
+        </div>
+
+
+        <div class="product-info">
+
+            <p class="title">
+                HOMESTYLE COLLECTION
+            </p>
+
+
+            <h1>
+                ${product.name}
+            </h1>
+
+
+            <div class="product-price">
+                $${product.price}
+            </div>
+
+
+            <p class="product-description">
+                ${product.description}
+            </p>
+
+
+            <div class="product-features">
+
+                <div>
+                    ✓ Premium Quality
+                </div>
+
+                <div>
+                    ✓ Modern Design
+                </div>
+
+                <div>
+                    ✓ Perfect For Your Home
+                </div>
+
+            </div>
+
+
+            <button
+                class="buy-button"
+                onclick="addProductFromPage()"
+            >
+                Add To Cart
+            </button>
+
+        </div>
+
+    `;
+
+} else {
+
+    details.innerHTML = `
+
+        <div class="not-found">
+
+            <h1>
+                Product Not Found
+            </h1>
+
+            <p>
+                Sorry, this product does not exist.
+            </p>
+
+            <a href="index.html">
+                Back Home
+            </a>
+
+        </div>
+
+    `;
+}
+
+
+/* =========================
+   ADD PRODUCT
+========================= */
+
+function addProductFromPage() {
+
+    if (!product) return;
+
+    cart.push(product);
+
+    saveCart();
+
+    updateCart();
+
+    alert(
+        product.name +
+        " has been added to your cart!"
+    );
+}
+
+
+/* =========================
+   CART BUTTON
+========================= */
+
+function goToCart() {
+
+    if (!product) {
+
+        window.location.href =
+            "index.html";
+
+        return;
+    }
+
+
+    cart.push(product);
+
+    saveCart();
+
+    window.location.href =
+        "index.html#products";
+}
+
+</script>
+
+</body>
+
+</html>
